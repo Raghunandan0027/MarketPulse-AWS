@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101827">
+  <title>MarketPulse | Market Intelligence Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="elite.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <main id="login-screen" class="login-view">
+    <div class="login-brand"><span class="brand-mark"><i class="fa-solid fa-wave-square"></i></span><span>Market<span>Pulse</span></span></div>
+    <div class="login-card">
+      <div class="eyebrow">MARKET INTELLIGENCE PLATFORM</div>
+      <h1>See the market<br>with more clarity.</h1>
+      <p class="muted">Monitor market indicators, compare stocks and explore financial planning tools in one place.</p>
+      <form id="login-form">
+        <label for="username">Admin username</label>
+        <input id="username" type="text" placeholder="Enter admin username" autocomplete="username" required>
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Enter password" autocomplete="current-password" required>
+        <button class="btn btn-primary" type="submit">Sign in to admin <i class="fa-solid fa-arrow-right"></i></button>
+      </form>
+      <div class="login-divider"><span>OR</span></div>
+      <button id="guest-login-btn" class="btn btn-secondary" type="button">Continue as guest</button>
+      <p class="login-note"><i class="fa-solid fa-circle-info"></i> Demo sign-in only. Production access should use Amazon Cognito and backend authorization.</p>
+    </div>
+    <div class="login-footer">MarketPulse · AWS Cloud Architecture Design project</div>
+  </main>
+
+  <div id="dashboard" class="app-shell hidden">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="MarketPulse home"><span class="brand-mark"><i class="fa-solid fa-wave-square"></i></span><span>Market<span>Pulse</span></span></a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="sidebar-nav" aria-label="Main navigation">
+        <button class="nav-btn active" data-tab="overview"><i class="fa-solid fa-chart-pie"></i> Overview</button>
+        <button class="nav-btn" data-tab="stocks"><i class="fa-solid fa-arrow-trend-up"></i> Stock watchlist</button>
+        <button class="nav-btn" data-tab="converter"><i class="fa-solid fa-money-bill-transfer"></i> Currency converter</button>
+        <button class="nav-btn" data-tab="emi"><i class="fa-solid fa-calculator"></i> Loan EMI</button>
+        <button class="nav-btn" data-tab="investment"><i class="fa-solid fa-coins"></i> Investment planner</button>
+        <button class="nav-btn" data-tab="market"><i class="fa-solid fa-chart-line"></i> Market analysis</button>
+        <button class="nav-btn" data-tab="portfolio"><i class="fa-solid fa-wallet"></i> Portfolio simulator</button>
+        <button class="nav-btn" data-tab="alerts"><i class="fa-solid fa-bell"></i> Price alerts</button>
+        <button id="nav-admin" class="nav-btn hidden" data-tab="admin"><i class="fa-solid fa-sliders"></i> Admin & audit</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="cloud-status"><span class="status-dot"></span><div><strong>Market data</strong><small id="data-mode">Demo data mode</small></div></div>
+        <button id="logout-btn" class="nav-btn logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Sign out</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div><div class="eyebrow">MARKET INTELLIGENCE</div><h1 id="page-title">Market overview</h1></div>
+        <div class="topbar-right"><button id="refresh-demo-btn" class="icon-action" type="button" title="Refresh demo snapshot" aria-label="Refresh demo snapshot"><i class="fa-solid fa-rotate"></i></button><button id="theme-toggle-btn" class="icon-action" type="button" title="Toggle theme" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button><button id="export-report-btn" class="icon-action" type="button" title="Export watchlist CSV" aria-label="Export watchlist CSV"><i class="fa-solid fa-download"></i></button><span class="market-status"><span class="status-dot"></span><span id="market-status-text">Demo snapshot</span></span><div class="avatar" id="role-avatar">G</div><div><strong id="role-label">Guest</strong><small id="today-label">MarketPulse</small></div></div>
+      </header>
+
+      <section class="market-strip" aria-label="Market summary">
+        <article class="metric-card"><div class="metric-top"><span>GOLD</span><i class="fa-solid fa-coins gold"></i></div><strong id="gold-price">₹6,200/g</strong><small class="metric-note">Illustrative reference value</small></article>
+        <article class="metric-card"><div class="metric-top"><span>SILVER</span><i class="fa-solid fa-coins silver"></i></div><strong id="silver-price">₹75/g</strong><small class="metric-note">Illustrative reference value</small></article>
+        <article class="metric-card"><div class="metric-top"><span>CRUDE OIL</span><i class="fa-solid fa-oil-well oil"></i></div><strong id="oil-price">$87</strong><small class="metric-note">Illustrative reference value</small></article>
+        <article class="metric-card"><div class="metric-top"><span>BITCOIN</span><i class="fa-brands fa-bitcoin btc"></i></div><strong id="btc-price">$63,400</strong><small class="metric-note">Illustrative reference value</small></article>
+      </section>
+
+      <section id="tab-overview" class="tab-pane">
+        <div class="section-heading"><div><h2>Market at a glance</h2><p class="muted">A quick view of the watchlist and the tools available in MarketPulse.</p></div><span class="pill"><i class="fa-solid fa-cloud"></i> Cloud-ready architecture</span></div>
+        <div class="overview-grid">
+          <article class="panel chart-panel"><div class="panel-heading"><div><h3>Market trend preview</h3><p class="muted">Select a symbol to inspect the demo series.</p></div><select id="overview-symbol" aria-label="Overview chart symbol"></select></div><div class="chart-wrap"><canvas id="overviewChart"></canvas></div><div class="chart-footnote" id="overview-chart-note">Illustrative sample data — not a live market feed.</div></article>
+          <article class="panel movers-panel"><div class="panel-heading"><div><h3>Top movers</h3><p class="muted">From the sample watchlist</p></div><i class="fa-solid fa-arrow-trend-up panel-icon"></i></div><div id="top-movers" class="movers-list"></div><button class="btn btn-secondary btn-small" data-goto="stocks">Explore full watchlist <i class="fa-solid fa-arrow-right"></i></button></article>
+        </div>
+        <div class="feature-grid">
+          <button class="feature-card" data-goto="converter"><span class="feature-icon"><i class="fa-solid fa-money-bill-transfer"></i></span><strong>Currency converter</strong><small>Convert between configured currencies.</small></button>
+          <button class="feature-card" data-goto="emi"><span class="feature-icon"><i class="fa-solid fa-calculator"></i></span><strong>Loan EMI planner</strong><small>Estimate monthly repayments and interest.</small></button>
+          <button class="feature-card" data-goto="investment"><span class="feature-icon"><i class="fa-solid fa-chart-line"></i></span><strong>Investment planner</strong><small>Estimate future value and potential returns.</small></button>
+        </div>
+      </section>
+
+      <section id="tab-stocks" class="tab-pane hidden">
+        <div class="section-heading"><div><h2>Stock watchlist</h2><p class="muted">50 illustrative stock records. Prices and changes are sample data until a provider API is connected.</p></div><div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input id="stock-search" type="search" placeholder="Search symbol or company" aria-label="Search stocks"></div></div>
+        <div class="panel table-panel"><div class="table-scroll"><table class="stocks-table"><thead><tr><th>Symbol</th><th>Company</th><th>Price (USD)</th><th>Change</th><th>Chart</th></tr></thead><tbody id="stocks-body"></tbody></table></div><div class="table-footer"><span id="stock-count">50 stocks</span><span>Sample watchlist · USD</span></div></div>
+      </section>
+
+      <section id="tab-converter" class="tab-pane hidden">
+        <div class="section-heading"><div><h2>Currency converter</h2><p class="muted">Convert using the rates configured in this demo.</p></div></div>
+        <div class="tool-grid"><article class="panel tool-panel"><div class="tool-icon"><i class="fa-solid fa-money-bill-transfer"></i></div><h3>Convert currency</h3><form id="converter-form"><label for="convert-amount">Amount</label><input type="number" id="convert-amount" value="100" min="0" step="any" required><div class="form-row"><div><label for="convert-from">From</label><select id="convert-from"></select></div><button id="swap-currencies" class="swap-btn" type="button" aria-label="Swap currencies"><i class="fa-solid fa-arrow-right-arrow-left"></i></button><div><label for="convert-to">To</label><select id="convert-to"></select></div></div><button class="btn btn-primary" type="submit">Convert amount</button></form><div class="result-box"><small>Converted amount</small><strong id="convert-result">₹8,320.00</strong><p id="convert-detail" class="muted">Using configured demo rates.</p></div></article><article class="panel info-panel"><h3>Rate information</h3><p class="muted">Rates are editable by the demo admin and stored in this browser. For a cloud deployment, read rates from your API and store shared values in DynamoDB.</p><div id="rates-list" class="rates-list"></div></article></div>
+      </section>
+
+      <section id="tab-emi" class="tab-pane hidden">
+        <div class="section-heading"><div><h2>Loan EMI planner</h2><p class="muted">Estimate monthly instalments and total borrowing cost.</p></div></div>
+        <div class="tool-grid"><article class="panel tool-panel"><div class="tool-icon"><i class="fa-solid fa-calculator"></i></div><h3>Loan details</h3><form id="emi-form"><label for="loan-amount">Loan amount (₹)</label><input type="number" id="loan-amount" value="500000" min="1" step="any" required><label for="loan-rate">Annual interest rate (%)</label><input type="number" id="loan-rate" value="9" min="0" max="100" step="0.01" required><label for="loan-time">Tenure (months)</label><input type="number" id="loan-time" value="60" min="1" max="600" required><button class="btn btn-primary" type="submit">Calculate EMI</button></form></article><article class="panel result-panel"><div class="result-label">Estimated monthly EMI</div><strong class="big-result" id="emi-result">₹10,379.16</strong><div class="result-stats"><div><small>Principal</small><strong id="emi-principal">₹5,00,000</strong></div><div><small>Total interest</small><strong id="emi-interest">₹1,22,749.60</strong></div><div><small>Total payment</small><strong id="emi-total">₹6,22,749.60</strong></div></div><p class="chart-footnote">Estimate only. Actual lender charges and repayment terms may differ.</p></article></div>
+      </section>
+
+      <section id="tab-investment" class="tab-pane hidden">
+        <div class="section-heading"><div><h2>Investment planner</h2><p class="muted">Estimate compound growth, contributions and potential returns.</p></div></div>
+        <div class="tool-grid"><article class="panel tool-panel"><div class="tool-icon"><i class="fa-solid fa-coins"></i></div><h3>Investment assumptions</h3><form id="investment-form"><label for="inv-amount">Initial investment (₹)</label><input type="number" id="inv-amount" value="50000" min="0" step="any" required><label for="inv-monthly">Monthly contribution (₹)</label><input type="number" id="inv-monthly" value="2000" min="0" step="any" required><label for="inv-rate">Expected annual return (%)</label><input type="number" id="inv-rate" value="10" min="-100" max="100" step="0.1" required><label for="inv-years">Time horizon (years)</label><input type="number" id="inv-years" value="10" min="1" max="60" required><button class="btn btn-primary" type="submit">Calculate projection</button></form></article><article class="panel result-panel"><div class="result-label">Projected future value</div><strong class="big-result" id="inv-result">₹6,02,000</strong><div class="result-stats"><div><small>Total invested</small><strong id="inv-invested">₹2,90,000</strong></div><div><small>Estimated growth</small><strong id="inv-growth">₹3,12,000</strong></div><div><small>Assumed return</small><strong id="inv-return-label">10% yearly</strong></div></div><div class="chart-wrap small-chart"><canvas id="investmentChart"></canvas></div><p class="chart-footnote">Illustrative projection, not a guaranteed return or investment recommendation.</p></article></div>
+      </section>
+
+      <section id="tab-market" class="tab-pane hidden">
+        <div class="section-heading"><div><h2>Market analysis</h2><p class="muted">Explore the sample price history for stocks and digital assets.</p></div><div class="chart-controls"><label for="market-symbol">Symbol</label><select id="market-symbol"></select><label for="market-range">Period</label><select id="market-range"><option value="7">7 points</option><option value="14">14 points</option><option value="30">30 points</option></select></div></div>
+        <div class="panel chart-panel"><div class="chart-summary"><div><small>Selected instrument</small><strong id="selected-symbol-name">Bitcoin (BTC)</strong></div><div><small>Reference price</small><strong id="selected-symbol-price">$63,400.00</strong></div><div><small>Data status</small><strong class="sample-status">Sample data</strong></div></div><div class="chart-wrap market-chart"><canvas id="marketChart"></canvas></div><div class="chart-footnote">The displayed historical series is generated for demonstration. It is not exchange data.</div></div>
+      </section>
+
+
+      <section id="tab-portfolio" class="tab-pane hidden">
+        <div class="section-heading"><div><h2>Portfolio simulator</h2><p class="muted">Build a hypothetical portfolio and track sample profit and loss locally.</p></div><span class="pill"><i class="fa-solid fa-flask"></i> Simulation only</span></div>
+        <div class="portfolio-summary">
+          <article class="metric-card"><div class="metric-top"><span>PORTFOLIO VALUE</span><i class="fa-solid fa-wallet"></i></div><strong id="portfolio-value">$0.00</strong><small class="metric-note">Based on sample prices</small></article>
+          <article class="metric-card"><div class="metric-top"><span>INVESTED COST</span><i class="fa-solid fa-coins"></i></div><strong id="portfolio-cost">$0.00</strong><small class="metric-note">Your simulated cost basis</small></article>
+          <article class="metric-card"><div class="metric-top"><span>UNREALIZED P/L</span><i class="fa-solid fa-arrow-trend-up"></i></div><strong id="portfolio-pnl">$0.00</strong><small class="metric-note" id="portfolio-pnl-pct">0.00% return</small></article>
+        </div>
+        <div class="tool-grid">
+          <article class="panel tool-panel"><div class="tool-icon"><i class="fa-solid fa-circle-plus"></i></div><h3>Add a simulated holding</h3><form id="portfolio-form"><label for="portfolio-symbol">Instrument</label><select id="portfolio-symbol"></select><label for="portfolio-quantity">Quantity</label><input id="portfolio-quantity" type="number" min="0.0001" step="any" value="1" required><button class="btn btn-primary" type="submit">Add holding</button></form><p class="chart-footnote">This is a classroom simulation. No real trade is placed.</p></article>
+          <article class="panel"><div class="panel-heading"><div><h3>Your holdings</h3><p class="muted">Stored in this browser only</p></div><button id="clear-portfolio-btn" class="btn btn-secondary btn-small" type="button">Reset portfolio</button></div><div class="table-scroll"><table class="stocks-table"><thead><tr><th>Symbol</th><th>Qty</th><th>Price</th><th>Value</th><th></th></tr></thead><tbody id="portfolio-body"></tbody></table></div></article>
+        </div>
+      </section>
+
+      <section id="tab-alerts" class="tab-pane hidden">
+        <div class="section-heading"><div><h2>Price alerts</h2><p class="muted">Create local demo alerts for a symbol crossing a target price.</p></div><span class="pill"><i class="fa-solid fa-bell"></i> Browser-local alerts</span></div>
+        <div class="tool-grid">
+          <article class="panel tool-panel"><div class="tool-icon"><i class="fa-solid fa-bell"></i></div><h3>Create an alert</h3><form id="alert-form"><label for="alert-symbol">Instrument</label><select id="alert-symbol"></select><label for="alert-condition">Condition</label><select id="alert-condition"><option value="above">Price rises above</option><option value="below">Price falls below</option></select><label for="alert-target">Target price (USD unless gold)</label><input id="alert-target" type="number" min="0.01" step="any" required><button class="btn btn-primary" type="submit">Create price alert</button></form><p class="chart-footnote">Alerts are checked when you open or refresh the demo. They do not run in the background.</p></article>
+          <article class="panel"><div class="panel-heading"><div><h3>Configured alerts</h3><p class="muted">Review or remove alert rules</p></div><button id="clear-alerts-btn" class="btn btn-secondary btn-small" type="button">Clear all</button></div><ul id="alerts-list" class="audit-list"></ul></article>
+        </div>
+      </section>
+
+      <section id="tab-admin" class="tab-pane hidden">
+        <div class="section-heading"><div><h2>Admin & audit</h2><p class="muted">Demo-only local controls. Production changes must be authorized by the backend.</p></div><span class="pill warning-pill"><i class="fa-solid fa-triangle-exclamation"></i> Browser-local changes</span></div>
+        <div class="admin-grid"><article class="panel tool-panel"><div class="tool-icon"><i class="fa-solid fa-sliders"></i></div><h3>Update currency rate</h3><form id="admin-rate-form"><label for="admin-currency-code">Currency code</label><input id="admin-currency-code" placeholder="e.g. USD" maxlength="8" required><label for="admin-currency-rate">Rate relative to USD base</label><input id="admin-currency-rate" type="number" min="0.000001" step="any" required><button class="btn btn-primary" type="submit">Save rate</button></form></article><article class="panel tool-panel"><div class="tool-icon"><i class="fa-solid fa-coins"></i></div><h3>Update asset price</h3><form id="admin-asset-form"><label for="admin-asset-name">Asset key</label><select id="admin-asset-name"><option value="gold">Gold</option><option value="silver">Silver</option><option value="oil">Crude oil</option><option value="bitcoin">Bitcoin</option></select><label for="admin-asset-price">Price</label><input id="admin-asset-price" type="number" min="0.01" step="any" required><button class="btn btn-primary" type="submit">Save asset price</button></form></article></div>
+        <article class="panel audit-panel"><div class="panel-heading"><div><h3>Activity log</h3><p class="muted">Events saved in this browser only.</p></div><button id="clear-logs-btn" class="btn btn-secondary btn-small" type="button"><i class="fa-solid fa-trash"></i> Clear log</button></div><ul id="admin-logs" class="audit-list"></ul></article>
+      </section>
+      <footer class="app-footer"><span>MarketPulse · AWS Cloud Architecture Design</span><span>Educational demonstration · Not investment advice</span></footer>
+    </main>
+  </div>
+  <script src="script.js"></script>
+  <script src="extras.js"></script>
+</body>
+</html>

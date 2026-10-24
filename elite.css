@@ -1,0 +1,38 @@
+/* MarketPulse Elite visual layer */
+:root{--bg:#f3f6fc;--surface:#fff;--text:#172033;--muted:#778197;--border:#e5eaf3;--shadow:0 14px 36px rgba(19,33,68,.065)}
+body{background:radial-gradient(ellipse at 85% 0%,rgba(93,123,255,.075),transparent 35%),var(--bg)}
+.app-shell{grid-template-columns:258px minmax(0,1fr)}
+.sidebar{background:linear-gradient(180deg,#111a2c,#17233b 75%,#101827);border-right:1px solid rgba(255,255,255,.04)}
+.brand-mark{box-shadow:0 7px 22px rgba(34,199,214,.2)}
+.topbar{padding-bottom:18px;border-bottom:1px solid var(--border)}
+.topbar h1{font-size:1.9rem;font-weight:800;letter-spacing:-.055em}
+.metric-card{position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.metric-card:after{content:"";position:absolute;right:-28px;bottom:-48px;width:105px;height:105px;border-radius:50%;background:linear-gradient(135deg,rgba(79,109,245,.08),rgba(34,199,214,.05))}
+.metric-card:hover{transform:translateY(-2px);box-shadow:0 17px 34px rgba(25,38,70,.09)}
+.metric-card>strong{position:relative;z-index:1}
+.panel{box-shadow:0 8px 26px rgba(25,38,70,.04);transition:box-shadow .2s}
+.panel:hover{box-shadow:0 12px 32px rgba(25,38,70,.065)}
+.btn-primary{background:linear-gradient(115deg,#4f6df5,#627bff 58%,#28b9d3)}
+.icon-action{width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--border);border-radius:10px;background:#fff;color:#64718a;box-shadow:0 2px 5px rgba(20,30,60,.02)}
+.icon-action:hover{background:#f2f5ff;color:var(--primary);border-color:#cfd8ff}
+.topbar-right{gap:8px}
+.topbar-right .market-status{margin-left:4px}
+.portfolio-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:18px}
+.portfolio-summary .metric-card:nth-child(3)>strong{color:var(--green)}
+.portfolio-summary .metric-card:nth-child(3)>strong.loss{color:var(--red)}
+.audit-list li{align-items:center}
+.alert-chip{display:inline-block;padding:5px 8px;border-radius:7px;background:#eef2ff;color:#5066cf;font-size:.68rem;font-weight:800;margin-right:8px}
+.remove-item{border:1px solid #f1d8dc;background:#fff5f6;color:#c34d60;border-radius:7px;padding:6px 8px;font-size:.7rem;font-weight:800}
+.table-action:focus-visible,.btn:focus-visible,.nav-btn:focus-visible,.icon-action:focus-visible{outline:3px solid rgba(79,109,245,.3);outline-offset:2px}
+body.dark-mode{--bg:#0c1220;--surface:#151e30;--text:#e8edf8;--muted:#9ba8bf;--border:#29354b;--shadow:0 14px 36px rgba(0,0,0,.2);background:radial-gradient(ellipse at 85% 0%,rgba(93,123,255,.1),transparent 35%),var(--bg);color:var(--text)}
+body.dark-mode .main-content{color:var(--text)}
+body.dark-mode .panel,body.dark-mode .metric-card,body.dark-mode .feature-card,body.dark-mode .icon-action,body.dark-mode .market-status,body.dark-mode .result-stats>div{background:var(--surface);border-color:var(--border);color:var(--text)}
+body.dark-mode .feature-card strong,body.dark-mode .stocks-table td,body.dark-mode .result-stats strong,body.dark-mode .panel-heading h3,body.dark-mode .tool-panel h3,body.dark-mode .info-panel h3{color:var(--text)}
+body.dark-mode .stocks-table th,body.dark-mode .table-footer,body.dark-mode .result-box,body.dark-mode .rate-row,body.dark-mode .audit-list li{background:#111a2a;border-color:var(--border);color:var(--muted)}
+body.dark-mode input,body.dark-mode select,body.dark-mode .search-box{background:#10192a;color:var(--text);border-color:var(--border)}
+body.dark-mode .search-box input{background:transparent}
+body.dark-mode .topbar{border-color:var(--border)}
+body.dark-mode .topbar-right>div:last-child strong,body.dark-mode .section-heading h2{color:var(--text)}
+body.dark-mode .mover-row{border-color:var(--border)}
+@media(max-width:1100px){.app-shell{grid-template-columns:220px minmax(0,1fr)}}
+@media(max-width:700px){.app-shell{display:block}.sidebar{position:relative}.portfolio-summary{grid-template-columns:1fr}.topbar-right{flex-wrap:wrap;justify-content:flex-end}.topbar h1{font-size:1.5rem}}
